@@ -7,6 +7,42 @@ const expandedWork = ref<boolean[]>(resume.works.map(() => false))
 const expandedProj = ref<boolean[]>(resume.projects.map(() => false))
 const expandedEdu = ref(false)
 
+function escapeRegExp(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+const emphasizeWords = [
+  'FreeRTOS',
+  'μC/OS-II',
+  'uGUI',
+  'ARM',
+  'RISC-V',
+  'I²C',
+  'IIC',
+  'SPI',
+  'UART',
+  'USART',
+  'ADC',
+  'USB',
+  'SD',
+  'AVRCP',
+  'A2DP',
+  'TRDP',
+  'Nordic',
+  'nRF52',
+  '32F4',
+  'BSP',
+  'SDK',
+  'API',
+] as const
+
+const emphasizeRe = new RegExp(`(${emphasizeWords.map(escapeRegExp).join('|')})`, 'g')
+
+function emphasizeParts(text: string): Array<{ t: string; em: boolean }> {
+  const parts = text.split(emphasizeRe).filter((p) => p.length > 0)
+  return parts.map((p) => ({ t: p, em: emphasizeWords.includes(p as (typeof emphasizeWords)[number]) }))
+}
+
 function toggleWork(i: number) {
   expandedWork.value = [...expandedWork.value]
   expandedWork.value[i] = !expandedWork.value[i]
@@ -80,10 +116,33 @@ function toggleEdu() {
           <span class="card-arrow" aria-hidden="true">▼</span>
         </button>
         <div v-show="expandedProj[i]" class="card-body">
-          <p class="project-desc">{{ proj.description }}</p>
-          <p class="project-role"><strong>本人职责：</strong>{{ proj.role }}</p>
+          <h4>项目概述</h4>
+          <ul class="project-points">
+            <li v-for="(line, idx) in proj.description" :key="idx">
+              <span
+                v-for="(p, k) in emphasizeParts(line)"
+                :key="k"
+                :class="{ em: p.em }"
+                >{{ p.t }}</span
+              >
+            </li>
+          </ul>
+
+          <p class="project-role">
+            <strong>本人职责：</strong>
+            <span
+              v-for="(p, k) in emphasizeParts(proj.role)"
+              :key="k"
+              :class="{ em: p.em }"
+              >{{ p.t }}</span
+            >
+          </p>
           <ul v-if="proj.highlights?.length" class="project-highlights">
-            <li v-for="(h, j) in proj.highlights" :key="j">{{ h }}</li>
+            <li v-for="(h, j) in proj.highlights" :key="j">
+              <span v-for="(p, k) in emphasizeParts(h)" :key="k" :class="{ em: p.em }">{{
+                p.t
+              }}</span>
+            </li>
           </ul>
         </div>
       </article>
@@ -112,7 +171,10 @@ function toggleEdu() {
 
     <footer class="footer">
       <RouterLink to="/">返回首页</RouterLink>
-      <a :href="`mailto:${resume.basic.email}`">联系我</a>
+      <span class="email-row">
+        <span class="email-label">邮箱</span>
+        <a :href="`mailto:${resume.basic.email}`" class="email-link">{{ resume.basic.email }}</a>
+      </span>
     </footer>
   </div>
 </template>
@@ -300,6 +362,15 @@ function toggleEdu() {
   font-size: 0.875rem;
 }
 
+.project-points {
+  margin: 0 0 0.5rem 1rem;
+  padding-left: 0.5rem;
+}
+
+.project-points li {
+  margin-bottom: 0.25rem;
+}
+
 .project-highlights {
   margin: 0.5rem 0 0 1rem;
   padding-left: 0.5rem;
@@ -309,6 +380,16 @@ function toggleEdu() {
 
 .project-highlights li {
   margin-bottom: 0.2rem;
+}
+
+.em {
+  display: inline-block;
+  padding: 0 0.18em;
+  border-radius: 4px;
+  background: rgba(94, 184, 232, 0.18);
+  border: 1px solid rgba(94, 184, 232, 0.18);
+  color: var(--heading);
+  font-weight: 600;
 }
 
 .education {
@@ -360,6 +441,21 @@ function toggleEdu() {
 
 .footer a:hover {
   text-decoration: underline;
+}
+
+.email-row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.email-label {
+  color: var(--muted);
+}
+
+.email-link {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 }
 
 @media (max-width: 640px) {

@@ -19,7 +19,13 @@
       </div>
       <div class="actions">
         <RouterLink to="/resume" class="btn btn-primary">查看简历</RouterLink>
-        <a :href="`mailto:${resume.basic.email}`" class="btn btn-outline">联系我</a>
+        <a
+          href="https://github.com/novolife"
+          class="btn btn-outline"
+          target="_blank"
+          rel="noopener noreferrer"
+          >联系我</a
+        >
       </div>
     </div>
   </div>
@@ -75,7 +81,7 @@ import { resume } from '../data/resume'
   margin: 0 0.05em;
   background-color: var(--card-bg);
   color: var(--heading);
-  text-align: center;
+  text-align: right;
   line-height: 1.4em;
   font-weight: 700;
   box-shadow: var(--shadow-soft);

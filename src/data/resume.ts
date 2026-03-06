@@ -13,14 +13,37 @@ export interface WorkItem {
 
 export interface ProjectItem {
   name: string
-  description: string
+  description: string[]
   role: string
   highlights?: string[]
   /** 可选：折叠时显示的时间段 */
   period?: string
 }
 
-export const resume = {
+export interface EducationItem {
+  school: string
+  period: string
+  college: string
+  major: string
+  campusExperience?: string[]
+}
+
+export interface ResumeData {
+  basic: {
+    name: string
+    gender: string
+    age: number
+    email: string
+    summary: string
+    homeTags: string[]
+  }
+  skills: string[]
+  works: WorkItem[]
+  projects: ProjectItem[]
+  education: EducationItem
+}
+
+export const resume: ResumeData = {
   basic: {
     name: 'novolife',
     gender: '男',
@@ -51,7 +74,7 @@ export const resume = {
       company: '某医疗科技股份有限公司',
       department: '电气技术部',
       title: '嵌入式软件工程师',
-      period: '2023.10 — 2026.05',
+      period: '2023.10 — 2026.04',
       duties: [
         '负责医疗器械产品的市场调研、软件开发及项目管理',
         '负责或参与多款医疗器械的市场调研与产品功能设计',
@@ -84,7 +107,7 @@ export const resume = {
       ],
     },
     {
-      company: '成都市某实业集团有限公司',
+      company: '成都某铁路相关企业',
       department: '',
       title: '电气工程师',
       period: '2021.07 — 2021.10',
@@ -101,22 +124,36 @@ export const resume = {
   projects: [
     {
       name: '便携式家用医疗器械',
-      description:
-        '便携式家用医疗器械，通过蓝牙实现参数配置。硬件以国产 32F4 系列为核心，采用国产驱动芯片达到进口芯片性能水平。主控软件基于 μC/OS-II，划分控制、采样、交互三任务，架构分为应用层、驱动层、BSP 层。蓝牙采用 Nordic nRF52 超小模组，经串口与主控通信，使用循环队列实现串口与蓝牙消息收发，采用前后台架构。',
+      description: [
+        '便携式家用医疗器械，通过蓝牙实现参数配置',
+        '硬件以国产 32F4 系列为核心，采用国产驱动芯片达到进口芯片性能水平',
+        '主控软件基于 μC/OS-II，划分控制、采样、交互三任务，架构分为应用层、驱动层、BSP 层',
+        '蓝牙采用 Nordic nRF52 超小模组，经串口与主控通信，使用循环队列实现串口与蓝牙消息收发，采用前后台架构',
+      ],
       role: '负责除控制算法外的全部软件及硬件电路设计',
       highlights: ['国产 32F4 + 国产电机驱动芯片', 'μC/OS-II 三任务架构', 'nRF52 蓝牙模组 + 串口循环队列'],
     },
     {
-      name: '便携式家用医疗器械',
-      description:
-        '便携式家用三类医疗器械，完全通过蓝牙控制。主控采用 Nordic nRF52 系列，运行 FreeRTOS，划分控制、通信、日志三任务，架构分为事务层、任务层、组件层、驱动层，实现高内聚低耦合。',
+      name: '便携式家用可穿戴医疗器械',
+      description: [
+        '便携式家用三类医疗器械，完全通过蓝牙控制',
+        '主控采用 Nordic nRF52 系列，运行 FreeRTOS，划分控制、通信、日志三任务',
+        '架构分为事务层、任务层、组件层、驱动层，实现高内聚低耦合',
+      ],
       role: '负责全部软件开发与软件文档编制，配合硬件选型与电路设计',
       highlights: ['nRF52 + FreeRTOS', '四层架构', '全蓝牙控制'],
     },
     {
       name: '多用途家庭音频中心',
-      description:
-        '基于 RISC-V 架构蓝牙音频芯片与 FreeRTOS。功能包括：SPI 控制数字广播芯片实现数字广播及文本播放；I²C 控制调频广播芯片并解码，用于时间同步或广播文本；通过 AVRCP、A2DP 等蓝牙规范连接设备并控制播放；USB/SD 播放本地音频；UART 与从模块通信；高精度 ADC 接收 FM、音频接口、CD Servo、磁带从机等音频并播放。',
+      description: [
+        '基于 RISC-V 架构蓝牙音频芯片与 FreeRTOS',
+        'SPI 控制数字广播芯片实现数字广播及文本播放',
+        'I²C 控制调频广播芯片并解码，用于时间同步或广播文本',
+        '通过 AVRCP、A2DP 等蓝牙规范连接设备并控制播放',
+        'USB/SD 播放本地音频',
+        'UART 与从模块通信',
+        '高精度 ADC 接收 FM、音频接口、CD Servo、磁带从机等音频并播放',
+      ],
       role: '负责多外设驱动开发、uGUI 框架设计与页面适配、驱动整合为 API 并应用于各模式，以及 API 层、GUI 层与操控层整合',
       highlights: [
         '多外设驱动（SPI/I²C/UART/ADC、蓝牙、USB/SD）',
@@ -139,4 +176,4 @@ export const resume = {
   },
 }
 
-export type Resume = typeof resume
+export type Resume = ResumeData

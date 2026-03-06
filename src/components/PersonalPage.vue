@@ -46,7 +46,9 @@ import { resume } from '../data/resume'
       <h2 class="block-title">项目经历</h2>
       <article v-for="(proj, i) in resume.projects" :key="i" class="project">
         <h3 class="project-name">{{ proj.name }}</h3>
-        <p class="project-desc">{{ proj.description }}</p>
+        <ul class="project-desc">
+          <li v-for="(line, j) in proj.description" :key="j">{{ line }}</li>
+        </ul>
         <p class="project-role"><strong>本人职责：</strong>{{ proj.role }}</p>
         <ul v-if="proj.highlights?.length" class="project-highlights">
           <li v-for="(h, j) in proj.highlights" :key="j">{{ h }}</li>
@@ -219,6 +221,14 @@ import { resume } from '../data/resume'
 .project-role {
   margin: 0 0 0.35rem;
   color: var(--text);
+}
+
+.project-desc {
+  padding-left: 1rem;
+}
+
+.project-desc li {
+  margin-bottom: 0.2rem;
 }
 
 .project-role {
