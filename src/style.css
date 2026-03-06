@@ -1,0 +1,46 @@
+:root {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 明亮欢快主题（默认） */
+  --bg: #faf8f5;
+  --card-bg: #ffffff;
+  --text: #2d3238;
+  --heading: #1a1d21;
+  --muted: #5c646d;
+  --border: #e8e6e3;
+  --accent: #5eb8e8;
+  --accent-2: #69d2a4;
+  --skill-bg: #eef4f8;
+  --card-radius: 10px;
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-strong: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* 可选：非常浅的渐变背景，增加层次感 */
+body {
+  background: linear-gradient(160deg, #fdfbf8 0%, #f5f2ed 50%, #f0ebe5 100%);
+  background-attachment: fixed;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
