@@ -5,14 +5,53 @@ const current = ref(0)
 const themes = ['theme-bocchi', 'theme-nijika', 'theme-ryo', 'theme-ikuyo']
 
 let timer: number
+
+// 鼠标点击特效
+interface ClickEffect {
+  id: number
+  x: number
+  y: number
+  text: string
+}
+const effects = ref<ClickEffect[]>([])
+let effectId = 0
+
+// 孤独摇滚相关元素
+const bocchiItems = [
+  '🎸', '🥁', '🎤', '🎵', '🎶', // 乐器与音乐
+  '🗑️', '📦', '🥭', // 波奇（防空洞、纸箱、芒果盒）
+  '🔺', '🧀', // 虹夏（多力多滋呆毛）
+  '🌿', '💸', // 凉（吃草、借钱）
+  '✨', '📸', // 郁代（现充光线、拍照）
+]
+
+function handleGlobalClick(e: MouseEvent) {
+  const text = bocchiItems[Math.floor(Math.random() * bocchiItems.length)] || '🎸'
+  const id = effectId++
+  
+  effects.value.push({
+    id,
+    x: e.clientX,
+    y: e.clientY,
+    text
+  })
+
+  // 动画结束后移除
+  setTimeout(() => {
+    effects.value = effects.value.filter(item => item.id !== id)
+  }, 1000)
+}
+
 onMounted(() => {
   timer = window.setInterval(() => {
     current.value = (current.value + 1) % themes.length
-  }, 2000)
+  }, 6000)
+  window.addEventListener('click', handleGlobalClick)
 })
 
 onUnmounted(() => {
   clearInterval(timer)
+  window.removeEventListener('click', handleGlobalClick)
 })
 </script>
 
@@ -25,6 +64,19 @@ onUnmounted(() => {
       :class="[theme, { active: current === index }]"
     ></div>
   </div>
+
+  <!-- 点击特效层 -->
+  <div class="click-effects">
+    <div
+      v-for="item in effects"
+      :key="item.id"
+      class="click-item"
+      :style="{ left: item.x + 'px', top: item.y + 'px' }"
+    >
+      {{ item.text }}
+    </div>
+  </div>
+
   <div class="app-content">
     <RouterView />
   </div>
@@ -98,5 +150,41 @@ onUnmounted(() => {
   z-index: 1;
   width: 100%;
   min-height: 100vh;
+}
+
+/* 鼠标点击特效 */
+.click-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.click-item {
+  position: absolute;
+  font-size: 1.5rem;
+  user-select: none;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: floatUpAndFade 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes floatUpAndFade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5) rotate(-15deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -120%) scale(1.2) rotate(10deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -180%) scale(1) rotate(20deg);
+  }
 }
 </style>
