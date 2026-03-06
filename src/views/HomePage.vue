@@ -6,7 +6,14 @@
         src="/favicon/web-app-manifest-512x512.png"
         alt="novolife avatar"
       />
-      <h1 class="name">{{ resume.basic.name }}</h1>
+      <h1 class="name">
+        <template v-if="resume.basic.name.toLowerCase() === 'novolife'">
+          novo<span class="chem-element"><span class="chem-num">3</span>Li</span>fe
+        </template>
+        <template v-else>
+          {{ resume.basic.name }}
+        </template>
+      </h1>
       <div class="tags">
         <span v-for="(tag, i) in resume.basic.homeTags" :key="i" class="tag">{{ tag }}</span>
       </div>
@@ -53,6 +60,35 @@ import { resume } from '../data/resume'
   font-weight: 700;
   color: var(--heading);
   margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chem-element {
+  display: inline-block;
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  margin: 0 0.05em;
+  background-color: var(--card-bg);
+  color: var(--heading);
+  text-align: center;
+  line-height: 1.4em;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+}
+
+.chem-num {
+  position: absolute;
+  top: 0.2em;
+  left: 0.25em;
+  font-size: 0.4em;
+  line-height: 1;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .tags {
