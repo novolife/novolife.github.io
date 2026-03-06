@@ -30,14 +30,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--bg);
   color: var(--text);
-}
-
-/* 可选：非常浅的渐变背景，增加层次感 */
-body {
-  background: linear-gradient(160deg, #fdfbf8 0%, #f5f2ed 50%, #f0ebe5 100%);
-  background-attachment: fixed;
+  background-color: transparent;
 }
 
 #app {

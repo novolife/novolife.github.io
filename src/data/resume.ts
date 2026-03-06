@@ -65,7 +65,7 @@ export const resume = {
       ],
     },
     {
-      company: '成都市某科技有限公司',
+      company: '成都市/深圳市某科技有限公司',
       department: '软件一组',
       title: '组长',
       period: '2021.10 — 2023.10',
