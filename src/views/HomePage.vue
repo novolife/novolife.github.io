@@ -1,9 +1,15 @@
 <template>
   <div class="home">
     <div class="hero">
-      <div class="avatar">{{ resume.basic.name.charAt(0) }}</div>
+      <img
+        class="avatar"
+        src="/favicon/web-app-manifest-512x512.png"
+        alt="novolife avatar"
+      />
       <h1 class="name">{{ resume.basic.name }}</h1>
-      <p class="tagline">{{ resume.basic.summary }}</p>
+      <div class="tags">
+        <span v-for="(tag, i) in resume.basic.homeTags" :key="i" class="tag">{{ tag }}</span>
+      </div>
       <div class="actions">
         <RouterLink to="/resume" class="btn btn-primary">查看简历</RouterLink>
         <a :href="`mailto:${resume.basic.email}`" class="btn btn-outline">联系我</a>
@@ -28,20 +34,16 @@ import { resume } from '../data/resume'
 
 .hero {
   text-align: center;
-  max-width: 28rem;
+  max-width: 32rem;
 }
 
 .avatar {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--card-bg);
-  font-size: 2rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  object-fit: cover;
+  border: 3px solid #fff;
   margin: 0 auto 1.25rem;
   box-shadow: var(--shadow-soft);
 }
@@ -53,11 +55,42 @@ import { resume } from '../data/resume'
   margin: 0 0 0.75rem;
 }
 
-.tagline {
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--text);
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
   margin: 0 0 1.5rem;
+}
+
+.tag {
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.65rem;
+  background: var(--skill-bg);
+  color: var(--text);
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease,
+    border-color 0.18s ease;
+  user-select: none;
+}
+
+.tag:hover {
+  transform: translateY(-2px);
+  background: rgba(94, 184, 232, 0.18);
+  border-color: rgba(94, 184, 232, 0.35);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag {
+    transition: none;
+  }
+  .tag:hover {
+    transform: none;
+  }
 }
 
 .actions {
@@ -111,8 +144,12 @@ import { resume } from '../data/resume'
   .name {
     font-size: 1.5rem;
   }
-  .tagline {
-    font-size: 0.875rem;
+  .tags {
+    margin-bottom: 1.25rem;
+  }
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
   .actions {
     flex-direction: column;

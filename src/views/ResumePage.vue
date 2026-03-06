@@ -5,6 +5,7 @@ import { resume } from '../data/resume'
 
 const expandedWork = ref<boolean[]>(resume.works.map(() => false))
 const expandedProj = ref<boolean[]>(resume.projects.map(() => false))
+const expandedEdu = ref(false)
 
 function toggleWork(i: number) {
   expandedWork.value = [...expandedWork.value]
@@ -14,6 +15,10 @@ function toggleWork(i: number) {
 function toggleProj(i: number) {
   expandedProj.value = [...expandedProj.value]
   expandedProj.value[i] = !expandedProj.value[i]
+}
+
+function toggleEdu() {
+  expandedEdu.value = !expandedEdu.value
 }
 </script>
 
@@ -86,12 +91,23 @@ function toggleProj(i: number) {
 
     <section class="block">
       <h2 class="block-title">教育经历</h2>
-      <div class="education">
-        <span class="edu-school">{{ resume.education.school }}</span>
-        <span class="edu-period">{{ resume.education.period }}</span>
-        <span class="edu-college">{{ resume.education.college }}</span>
-        <span class="edu-major">{{ resume.education.major }}</span>
-      </div>
+      <article class="card collapsible" :class="{ expanded: expandedEdu }">
+        <button type="button" class="card-head" @click="toggleEdu">
+          <span class="card-head-text">{{ resume.education.school }}</span>
+          <span class="card-head-meta">{{ resume.education.period }}</span>
+          <span class="card-arrow" aria-hidden="true">▼</span>
+        </button>
+        <div v-show="expandedEdu" class="card-body">
+          <div class="education">
+            <span class="edu-college">{{ resume.education.college }}</span>
+            <span class="edu-major">{{ resume.education.major }}</span>
+            <span class="edu-period">{{ resume.education.period }}</span>
+          </div>
+          <ul v-if="resume.education.campusExperience?.length" class="campus-experience">
+            <li v-for="(item, i) in resume.education.campusExperience" :key="i">{{ item }}</li>
+          </ul>
+        </div>
+      </article>
     </section>
 
     <footer class="footer">
@@ -162,6 +178,28 @@ function toggleProj(i: number) {
   background: var(--skill-bg);
   border-radius: var(--card-radius);
   font-size: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease,
+    border-color 0.18s ease;
+  user-select: none;
+}
+
+.skills li:hover {
+  transform: translateY(-2px);
+  background: rgba(105, 210, 164, 0.2);
+  border-color: rgba(105, 210, 164, 0.4);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills li {
+    transition: none;
+  }
+  .skills li:hover {
+    transform: none;
+  }
 }
 
 .card {
@@ -293,6 +331,15 @@ function toggleProj(i: number) {
 .edu-college,
 .edu-major {
   font-size: 0.875rem;
+}
+
+.campus-experience {
+  margin: 0.75rem 0 0 1rem;
+  padding-left: 0.5rem;
+}
+
+.campus-experience li {
+  margin-bottom: 0.25rem;
 }
 
 .footer {
